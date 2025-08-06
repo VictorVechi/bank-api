@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Account } from "@prisma/client";
-import { AccountModel } from "src/account/domain/entity/account.dto";
+import { AccountModel } from "src/account/domain/entity/account.entity";
 import { AccountRepository } from "src/account/domain/repository/account-repository";
 import { PrismaService } from "src/database/prisma.service";
 
@@ -9,7 +9,7 @@ export class PrismaAccountRepository implements AccountRepository {
     constructor(private readonly prismaService: PrismaService) {}
 
 
-    async findById(id: number): Promise<Account | null> {
+    async findById(id: string): Promise<Account | null> {
         return this.prismaService.account.findUnique({
             where: { id },
         });
@@ -22,7 +22,7 @@ export class PrismaAccountRepository implements AccountRepository {
             update: account,
         });
     }
-    async delete(id: number): Promise<void> {
+    async delete(id: string): Promise<void> {
         await this.prismaService.account.delete({
             where: { id },
         });
