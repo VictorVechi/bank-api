@@ -6,7 +6,6 @@ export class AppController {
   constructor(private readonly accountService: AccountService) {}
 
   @Post('/reset')
-  // @HttpCode(HttpStatus.OK)
   async reset(@Response() res): Promise<void> {
     try {
       await this.accountService.reset();
