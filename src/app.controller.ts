@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { AccountService } from './account/application/account.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly accountService: AccountService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Post('/reset')
+  @HttpCode(HttpStatus.OK)
+  async reset(): Promise<void> {
+    await this.accountService.reset();
   }
 }
