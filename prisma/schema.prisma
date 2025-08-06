@@ -20,8 +20,8 @@ model Account {
 model EventLog {
   id            String   @id
   type          String
-  originId      String
-  destinationId String?
+  originId      Int
+  destinationId Int?
   amount        Decimal
   createdAt     DateTime @default(now())
 
