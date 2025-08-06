@@ -9,7 +9,6 @@ import { EventController } from './events/infrastructure/controller/event.contro
 @Module({
   imports: [],
   controllers: [
-    AppController,
     EventController
   ],
   providers: [
