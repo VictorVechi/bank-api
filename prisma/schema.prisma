@@ -1,9 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -12,8 +8,8 @@ datasource db {
 }
 
 model Account {
-  id      String  @id
-  balance Decimal     @default(0)
+  id        String   @id
+  balance   Decimal  @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -22,12 +18,12 @@ model Account {
 }
 
 model EventLog {
-  id        String   @id
-  type      String
-  originId  String
+  id            String   @id
+  type          String
+  originId      String
   destinationId String?
-  amount    Decimal
-  createdAt DateTime @default(now())
-  
+  amount        Decimal
+  createdAt     DateTime @default(now())
+
   @@index([createdAt])
 }
