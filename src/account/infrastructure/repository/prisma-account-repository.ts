@@ -14,13 +14,15 @@ export class PrismaAccountRepository implements AccountRepository {
             where: { id },
         });
     }
-    
-    async save(account: AccountModel): Promise<void> {
-        await this.prismaService.account.upsert({
+
+    async save(account: AccountModel): Promise<Account> {
+       const result = await this.prismaService.account.upsert({
             where: { id: account.id },
             create: account,
             update: account,
         });
+
+        return result;
     }
     async delete(id: string): Promise<void> {
         await this.prismaService.account.delete({
