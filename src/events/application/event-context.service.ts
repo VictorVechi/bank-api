@@ -5,8 +5,6 @@ import { DepositServiceEstrategy } from './estrategies/deposit.service';
 import { TransferServiceStrategy } from './estrategies/transfer.service';
 import { WithdrawServiceStrategy } from './estrategies/withdraw.service';
 import { EventType } from '../domain/enum/event-enum';
-import { DepositResponseDto } from '../domain/dto/deposit-response.dto';
-import { WithdrawResponseDto } from '../domain/dto/withdraw-response.dto';
 import { EventResponseDto } from '../domain/dto/event-response.dto';
 
 
