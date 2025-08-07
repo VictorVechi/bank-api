@@ -4,7 +4,7 @@ import { AccountService } from 'src/account/application/account.service';
 
 @Controller()
 export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(private readonly accountService: AccountService) { }
 
   @Post('/reset')
   async reset(@Res() res: Response): Promise<void> {
@@ -18,17 +18,17 @@ export class AccountController {
   }
 
   @Get('/balance')
-    async getBalance(@Res() res: Response, @Query('account_id') accountId: string): Promise<void> {
+  async getBalance(@Res() res: Response, @Query('account_id') accountId: string): Promise<void> {
     try {
-        const balance = await this.accountService.getBalance(accountId);
-        if (!balance) {
-            res.status(HttpStatus.NOT_FOUND).send(0);
-            return;
-        }
-        res.status(HttpStatus.OK).send(balance);
+      const balance = await this.accountService.getBalance(accountId);
+      if (!balance) {
+        res.status(HttpStatus.NOT_FOUND).send(0);
+        return;
+      }
+      res.status(HttpStatus.OK).send(balance);
     } catch (error) {
-        console.error('Error fetching account balance:', error);
-        res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error fetching account balance:', error);
+      res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
+  }
 }
