@@ -56,8 +56,10 @@ export class TransferServiceStrategy implements EventStrategy {
                     throw new Error("Insufficient funds for transfer");
                 }
                 newBalance = ((account.balance.toNumber() * 1000) - (event.amount * 1000)) / 1000;
+                break;
             case OperationEnum.CREDIT:
                 newBalance = ((account.balance.toNumber() * 1000) + (event.amount * 1000)) / 1000;
+                break;
         }
         return newBalance;
     }
