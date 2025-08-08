@@ -9,13 +9,6 @@ describe('PrismaAccountRepository', () => {
     let prismaService: jest.Mocked<PrismaService>;
 
     beforeEach(() => {
-        // prismaService = {
-        //     account: {
-        //         findUnique: jest.fn(),
-        //         upsert: jest.fn(),
-        //         deleteMany: jest.fn(),
-        //     },
-        // };
         prismaService = new PrismaService() as jest.Mocked<PrismaService>;
         repository = new PrismaAccountRepository(prismaService);
     });
