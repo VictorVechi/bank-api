@@ -12,25 +12,25 @@ import { WithdrawServiceStrategy } from './events/application/estrategies/withdr
 import { AccountController } from './account/infrastructure/controller/account.controller';
 
 @Module({
-  imports: [],
-  controllers: [
-    EventController,
-    AccountController,
-  ],
-  providers: [
-    PrismaService,
-    AccountService,
-    WithdrawServiceStrategy,
-    TransferServiceStrategy,
-    DepositServiceEstrategy,
-    {
-      provide: EventContextInterface,
-      useClass: EventContextService
-    },
-    {
-      provide: AccountRepository,
-      useClass: PrismaAccountRepository
-    }
-  ],
+    imports: [],
+    controllers: [
+        EventController,
+        AccountController,
+    ],
+    providers: [
+        PrismaService,
+        AccountService,
+        WithdrawServiceStrategy,
+        TransferServiceStrategy,
+        DepositServiceEstrategy,
+        {
+            provide: EventContextInterface,
+            useClass: EventContextService
+        },
+        {
+            provide: AccountRepository,
+            useClass: PrismaAccountRepository
+        }
+    ],
 })
-export class AppModule {}
+export class AppModule { }

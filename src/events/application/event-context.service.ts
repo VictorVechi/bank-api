@@ -14,7 +14,7 @@ export class EventContextService implements EventContextInterface {
         private readonly depositService: DepositServiceEstrategy,
         private readonly transferService: TransferServiceStrategy,
         private readonly withdrawService: WithdrawServiceStrategy,
-    ){}
+    ) {}
 
     async processEvent(event: EventDto): Promise<EventResponseDto> {
         switch (event.type.toLowerCase()) {
