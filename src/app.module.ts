@@ -6,9 +6,9 @@ import { EventController } from './events/infrastructure/controller/event.contro
 import { AccountService } from './account/application/account.service';
 import { EventContextService } from './events/application/event-context.service';
 import { EventContextInterface } from './events/domain/application/event-context-interface';
-import { DepositServiceEstrategy } from './events/application/estrategies/deposit.service';
-import { TransferServiceStrategy } from './events/application/estrategies/transfer.service';
-import { WithdrawServiceStrategy } from './events/application/estrategies/withdraw.service';
+import { DepositServiceEstrategy } from './events/application/strategies/deposit.service';
+import { TransferServiceStrategy } from './events/application/strategies/transfer.service';
+import { WithdrawServiceStrategy } from './events/application/strategies/withdraw.service';
 import { AccountController } from './account/infrastructure/controller/account.controller';
 
 @Module({
