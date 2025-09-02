@@ -8,7 +8,8 @@ import { EventDto } from "src/events/domain/dto/event.dto";
 @Controller()
 export class EventController {
     constructor(
-        @Inject(DependencyInjectionEnum.EVENT_CONTEXT) private readonly eventContext: EventContextInterface) {}
+        @Inject(DependencyInjectionEnum.EVENT_CONTEXT) private readonly eventContext: EventContextInterface
+    ) {}
 
     @Post('/event')
     async handleEvent(@Body() body: EventDto, @Res() res: Response): Promise<void> {

@@ -12,4 +12,9 @@ export enum DependencyInjectionEnum {
     DEPOSIT_STRATEGY = 'DepositStrategyInterface',
     WITHDRAW_STRATEGY = 'WithdrawStrategyInterface',
     TRANSFER_STRATEGY = 'TransferStrategyInterface',
+
+    // Adapters
+    DEPOSIT_ADAPTER = 'DepositAdapterInterface',
+    WITHDRAW_ADAPTER = 'WithdrawAdapterInterface',
+    TRANSFER_ADAPTER = 'TransferAdapterInterface',
 }

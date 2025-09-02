@@ -9,6 +9,9 @@ import { TransferServiceStrategy } from './events/application/strategies/transfe
 import { WithdrawServiceStrategy } from './events/application/strategies/withdraw.service';
 import { AccountController } from './account/infra/controller/account.controller';
 import { DependencyInjectionEnum } from './dependencyInjection/dependency-injection.enum';
+import { DepositAdapter } from './events/application/adapters/deposit.adapter';
+import { WithdrawAdapter } from './events/application/adapters/withdraw.adapter';
+import { TransferAdapter } from './events/application/adapters/transfer.adapter';
 
 @Module({
     imports: [],
@@ -45,6 +48,18 @@ import { DependencyInjectionEnum } from './dependencyInjection/dependency-inject
             provide: DependencyInjectionEnum.TRANSFER_STRATEGY,
             useClass: TransferServiceStrategy
         },
+        {
+            provide: DependencyInjectionEnum.DEPOSIT_ADAPTER,
+            useClass: DepositAdapter
+        },
+        {
+            provide: DependencyInjectionEnum.WITHDRAW_ADAPTER,
+            useClass: WithdrawAdapter
+        },
+        {
+            provide: DependencyInjectionEnum.TRANSFER_ADAPTER,
+            useClass: TransferAdapter
+        }
     ],
 })
 export class AppModule { }
