@@ -1,10 +1,13 @@
-import { Controller, Get, HttpStatus, Param, Post, Query, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Inject, Param, Post, Query, Res } from '@nestjs/common';
 import type { Response } from 'express';
-import { AccountService } from 'src/account/application/account.service';
+import type { AccountServiceInterface } from 'src/account/domain/application/account-service.interface';
+import { DependencyInjectionEnum } from 'src/dependencyInjection/dependency-injection.enum';
 
 @Controller()
 export class AccountController {
-    constructor(private readonly accountService: AccountService) { }
+    constructor(
+        @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface
+    ) { }
 
     @Post('/reset')
     async reset(@Res() res: Response): Promise<void> {

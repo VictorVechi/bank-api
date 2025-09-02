@@ -1,6 +1,6 @@
 import { Decimal } from "@prisma/client/runtime/library";
 import { PrismaAccountRepository } from "src/account/infra/repository/prisma-account-repository";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "src/database/application/prisma.service";
 
 
 

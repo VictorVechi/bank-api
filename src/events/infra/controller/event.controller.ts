@@ -1,12 +1,14 @@
-import { Body, Controller, HttpStatus, Post, Res } from "@nestjs/common";
+import { Body, Controller, HttpStatus, Inject, Post, Res } from "@nestjs/common";
 import type { Response } from "express";
-import { EventContextInterface } from "src/events/domain/application/event-context-interface";
+import { DependencyInjectionEnum } from "src/dependencyInjection/dependency-injection.enum";
+import type { EventContextInterface } from "src/events/domain/application/event-context-interface";
 import { EventDto } from "src/events/domain/dto/event.dto";
 
 
 @Controller()
 export class EventController {
-    constructor(private readonly eventContext: EventContextInterface) {}
+    constructor(
+        @Inject(DependencyInjectionEnum.EVENT_CONTEXT) private readonly eventContext: EventContextInterface) {}
 
     @Post('/event')
     async handleEvent(@Body() body: EventDto, @Res() res: Response): Promise<void> {

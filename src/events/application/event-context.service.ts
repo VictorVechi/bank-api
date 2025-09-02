@@ -1,19 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { EventDto } from '../domain/dto/event.dto';
 import { EventContextInterface } from '../domain/application/event-context-interface';
-import { DepositServiceStrategy } from './strategies/deposit.service';
-import { TransferServiceStrategy } from './strategies/transfer.service';
-import { WithdrawServiceStrategy } from './strategies/withdraw.service';
 import { EventType } from '../domain/enum/event-enum';
 import { EventResponseDto } from '../domain/dto/event-response.dto';
+import { DependencyInjectionEnum } from 'src/dependencyInjection/dependency-injection.enum';
+import type { DepositStrategyInterface } from '../domain/application/strategies/deposit-strategy.interface';
+import type { TransferStrategyInterface } from '../domain/application/strategies/transfer-strategy.interface';
+import type { WithdrawStrategyInterface } from '../domain/application/strategies/withdraw-strategy.interface';
 
 
 @Injectable()
 export class EventContextService implements EventContextInterface {
     constructor(
-        private readonly depositService: DepositServiceStrategy,
-        private readonly transferService: TransferServiceStrategy,
-        private readonly withdrawService: WithdrawServiceStrategy,
+        @Inject(DependencyInjectionEnum.DEPOSIT_STRATEGY) private readonly depositService: DepositStrategyInterface,
+        @Inject(DependencyInjectionEnum.TRANSFER_STRATEGY) private readonly transferService: TransferStrategyInterface,
+        @Inject(DependencyInjectionEnum.WITHDRAW_STRATEGY) private readonly withdrawService: WithdrawStrategyInterface,
     ) {}
 
     async processEvent(event: EventDto): Promise<EventResponseDto> {

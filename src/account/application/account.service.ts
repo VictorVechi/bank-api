@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { AccountRepository } from '../domain/repository/account-repository';
+import { Inject, Injectable } from '@nestjs/common';
 import { Account } from '@prisma/client';
-import { AccountModel } from '../domain/entity/account.entity';
+import { AccountServiceInterface } from '../domain/application/account-service.interface';
+import { DependencyInjectionEnum } from 'src/dependencyInjection/dependency-injection.enum';
+import type { AccountRepositoryInterface } from '../domain/repository/account-repository.interface';
 
 @Injectable()
-export class AccountService {
-    constructor(private readonly accountRepository: AccountRepository) {}
+export class AccountService implements AccountServiceInterface {
+    constructor(
+        @Inject(DependencyInjectionEnum.ACCOUNT_REPOSITORY) private readonly accountRepository: AccountRepositoryInterface
+    ) {}
     async reset(): Promise<void> {
         try {
             await this.accountRepository.resetTable();
@@ -24,22 +27,22 @@ export class AccountService {
         }
     }
 
-    async saveAccount(account: AccountModel): Promise<Account> {
-        try {
-            return await this.accountRepository.save(account);
-        } catch (error) {
-            console.error('Error saving account:', error);
-            throw new Error('Failed to save account');
+    async withdraw(account: Account, amount: number): Promise<Account | null> {
+        if (account.balance < amount) {
+            throw new Error('Insufficient funds');
         }
+
+        account.balance -= amount;
+        account.updatedAt = new Date();
+
+        return await this.accountRepository.save(account);
     }
 
-    async saveAccounts(accounts: AccountModel[]): Promise<Account[]> {
-        try {
-            return await this.accountRepository.saveAll(accounts);
-        } catch (error) {
-            console.error('Error saving accounts:', error);
-            throw new Error('Failed to save accounts');
-        }
+    async deposit(account: Account, amount: number): Promise<Account> {
+
+        account.balance += amount;
+
+        return await this.accountRepository.save(account);
     }
 
     async getBalance(accountId: string): Promise<number | null> {
@@ -48,7 +51,7 @@ export class AccountService {
             if (!account) {
                 return null;
             }
-            return account.balance.toNumber();
+            return account.balance;
         } catch (error) {
             console.error('Error fetching account balance:', error);
             throw new Error('Failed to fetch account balance');

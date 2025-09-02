@@ -1,12 +1,15 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Account } from "@prisma/client";
 import { AccountModel } from "src/account/domain/entity/account.entity";
-import { AccountRepository } from "src/account/domain/repository/account-repository";
-import { PrismaService } from "src/database/prisma.service";
+import { AccountRepositoryInterface } from "src/account/domain/repository/account-repository.interface";
+import type { PrismaServiceInterface } from "src/database/domain/prisma-service.interface";
+import { DependencyInjectionEnum } from "src/dependencyInjection/dependency-injection.enum";
 
 @Injectable()
-export class PrismaAccountRepository implements AccountRepository {
-    constructor(private readonly prismaService: PrismaService) { }
+export class PrismaAccountRepository implements AccountRepositoryInterface {
+    constructor(
+        @Inject(DependencyInjectionEnum.PRISMA_SERVICE) private readonly prismaService: PrismaServiceInterface
+    ) {}
 
     async findById(id: string): Promise<Account | null> {
         return this.prismaService.account.findUnique({

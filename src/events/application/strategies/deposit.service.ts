@@ -1,37 +1,41 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Account } from "@prisma/client";
-import { AccountService } from "src/account/application/account.service";
+import type { AccountServiceInterface } from "src/account/domain/application/account-service.interface";
 import { AccountModel } from "src/account/domain/entity/account.entity";
-import { EventStrategy } from "src/events/domain/application/event-strategy";
+import { DependencyInjectionEnum } from "src/dependencyInjection/dependency-injection.enum";
+import { DepositStrategyInterface } from "src/events/domain/application/strategies/deposit-strategy.interface";
 import { DepositResponseDto } from "src/events/domain/dto/deposit-response.dto";
 import { EventDto } from "src/events/domain/dto/event.dto";
 
 
 @Injectable()
-export class DepositServiceStrategy implements EventStrategy {
-    constructor(private readonly accountService: AccountService) {}
-    async executeTransaction(event: EventDto): Promise<DepositResponseDto> {
+export class DepositServiceStrategy implements DepositStrategyInterface {
+    constructor(
+        @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface
+    ) {}
 
-        const depositData = this.validateEvent(event);
+    async executeTransaction(event: EventDto): Promise<any> {
 
-        const account = await this.accountService.findAccountById(depositData.id);
+        // const depositData = this.validateEvent(event);
 
-        if (!account) {
-            const newAccount = await this.accountService.saveAccount(depositData);
-            return this.toJson(newAccount);
-        }
+        // const account = await this.accountService.findAccountById(depositData.id);
 
-        const updatedBalance = this.handleFluctuation(depositData, account);
+        // if (!account) {
+        //     const newAccount = await this.accountService.dep(depositData);
+        //     return this.toJson(newAccount);
+        // }
 
-        const updatedAccount = {
-            ...account,
-            balance: updatedBalance,
-            updatedAt: new Date(),
-        };
+        // const updatedBalance = this.handleFluctuation(depositData, account);
 
-        const savedAccount = await this.accountService.saveAccount(updatedAccount);
+        // const updatedAccount = {
+        //     ...account,
+        //     balance: updatedBalance,
+        //     updatedAt: new Date(),
+        // };
 
-        return this.toJson(savedAccount);
+        // const savedAccount = await this.accountService.saveAccount(updatedAccount);
+
+        // return this.toJson(savedAccount);
     }
 
     private validateEvent(event: EventDto): AccountModel {
@@ -45,15 +49,11 @@ export class DepositServiceStrategy implements EventStrategy {
         }
     }
 
-    private handleFluctuation(event: AccountModel, account: Account): number {
-        return ((account.balance.toNumber() * 1000) + (event.balance * 1000)) / 1000;
-    }
-
     private toJson(account: Account): DepositResponseDto {
         return {
             destination: {
                 id: account.id,
-                balance: account.balance.toNumber(),
+                balance: account.balance,
             }
         };
     }

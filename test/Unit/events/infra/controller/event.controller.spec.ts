@@ -1,7 +1,7 @@
 import { AccountService } from "src/account/application/account.service";
 import { AccountController } from "src/account/infra/controller/account.controller";
 import { PrismaAccountRepository } from "src/account/infra/repository/prisma-account-repository";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "src/database/application/prisma.service";
 import { EventContextService } from "src/events/application/event-context.service";
 import { DepositServiceStrategy } from "src/events/application/strategies/deposit.service";
 import { TransferServiceStrategy } from "src/events/application/strategies/transfer.service";

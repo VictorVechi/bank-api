@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from './database/prisma.service';
-import { AccountRepository } from './account/domain/repository/account-repository';
+import { PrismaService } from './database/application/prisma.service';
 import { PrismaAccountRepository } from './account/infra/repository/prisma-account-repository';
 import { EventController } from './events/infra/controller/event.controller';
 import { AccountService } from './account/application/account.service';
 import { EventContextService } from './events/application/event-context.service';
-import { EventContextInterface } from './events/domain/application/event-context-interface';
 import { DepositServiceStrategy } from './events/application/strategies/deposit.service';
 import { TransferServiceStrategy } from './events/application/strategies/transfer.service';
 import { WithdrawServiceStrategy } from './events/application/strategies/withdraw.service';
 import { AccountController } from './account/infra/controller/account.controller';
+import { DependencyInjectionEnum } from './dependencyInjection/dependency-injection.enum';
 
 @Module({
     imports: [],
@@ -18,19 +17,34 @@ import { AccountController } from './account/infra/controller/account.controller
         AccountController,
     ],
     providers: [
-        PrismaService,
-        AccountService,
-        WithdrawServiceStrategy,
-        TransferServiceStrategy,
-        DepositServiceStrategy,
         {
-            provide: EventContextInterface,
+            provide: DependencyInjectionEnum.PRISMA_SERVICE,
+            useClass: PrismaService
+        },
+        {
+            provide: DependencyInjectionEnum.ACCOUNT_SERVICE,
+            useClass: AccountService
+        },
+        {
+            provide: DependencyInjectionEnum.EVENT_CONTEXT,
             useClass: EventContextService
         },
         {
-            provide: AccountRepository,
+            provide: DependencyInjectionEnum.ACCOUNT_REPOSITORY,
             useClass: PrismaAccountRepository
-        }
+        },
+        {
+            provide: DependencyInjectionEnum.DEPOSIT_STRATEGY,
+            useClass: DepositServiceStrategy
+        },
+        {
+            provide: DependencyInjectionEnum.WITHDRAW_STRATEGY,
+            useClass: WithdrawServiceStrategy
+        },
+        {
+            provide: DependencyInjectionEnum.TRANSFER_STRATEGY,
+            useClass: TransferServiceStrategy
+        },
     ],
 })
 export class AppModule { }
