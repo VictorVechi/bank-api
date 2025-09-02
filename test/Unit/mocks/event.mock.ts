@@ -1,5 +1,5 @@
-import { EventDto } from "src/events/domain/dto/event.dto";
-import { EventType } from "src/events/domain/enum/event-enum";
+import { EventDto } from "src/account/domain/dto/event.dto";
+import { EventType } from "src/account/domain/enum/event-enum";
 
 
 export const depositEventMock: EventDto = {

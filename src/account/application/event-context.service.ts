@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { EventDto } from '../domain/dto/event.dto';
-import { EventContextInterface } from '../domain/application/event-context-interface';
-import { EventType } from '../domain/enum/event-enum';
-import { EventResponseDto } from '../domain/dto/event-response.dto';
 import { DependencyInjectionEnum } from 'src/dependencyInjection/dependency-injection.enum';
+import { EventContextInterface } from '../domain/application/event-context-interface';
 import type { DepositStrategyInterface } from '../domain/application/strategies/deposit-strategy.interface';
 import type { TransferStrategyInterface } from '../domain/application/strategies/transfer-strategy.interface';
 import type { WithdrawStrategyInterface } from '../domain/application/strategies/withdraw-strategy.interface';
+import { EventType } from '../domain/enum/event-enum';
+import { EventDto } from '../domain/dto/event.dto';
+import { EventResponseDto } from '../domain/dto/event-response.dto';
+
 
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Account } from "@prisma/client";
-import { TransferAdapterInterface } from "src/events/domain/application/adapters/transfer-adapter.interface";
-import { TransferResponseDto } from "src/events/domain/dto/transfer-response.dto";
+import { TransferAdapterInterface } from "src/account/domain/application/adapters/transfer-adapter.interface";
+import { TransferResponseDto } from "src/account/domain/dto/transfer-response.dto";
 
 
 export class TransferAdapter implements TransferAdapterInterface {

@@ -6,5 +6,4 @@ import { WithdrawResponseDto } from "./withdraw-response.dto";
 export type EventResponseDto =
     | DepositResponseDto
     | WithdrawResponseDto
-    | TransferResponseDto
-    | null;
+    | TransferResponseDto;

@@ -1,12 +1,15 @@
-import { Controller, Get, HttpStatus, Inject, Param, Post, Query, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Query, Res } from '@nestjs/common';
 import type { Response } from 'express';
 import type { AccountServiceInterface } from 'src/account/domain/application/account-service.interface';
+import type { EventContextInterface } from 'src/account/domain/application/event-context-interface';
+import { EventDto } from 'src/account/domain/dto/event.dto';
 import { DependencyInjectionEnum } from 'src/dependencyInjection/dependency-injection.enum';
 
 @Controller()
 export class AccountController {
     constructor(
-        @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface
+        @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface,
+        @Inject(DependencyInjectionEnum.EVENT_CONTEXT) private readonly eventContext: EventContextInterface
     ) { }
 
     @Post('/reset')
@@ -34,4 +37,15 @@ export class AccountController {
             res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Post('/event')
+        async handleEvent(@Body() body: EventDto, @Res() res: Response): Promise<void> {
+            try {
+                const response = await this.eventContext.processEvent(body);
+                res.status(HttpStatus.CREATED).send(response);
+            } catch (error) {
+                console.error('Error processing event:', error);
+                res.status(HttpStatus.NOT_FOUND).send(0);
+            }
+        }
 }

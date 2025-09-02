@@ -9,31 +9,22 @@ import { AccountModel } from '../domain/entity/account.entity';
 export class AccountService implements AccountServiceInterface {
     constructor(
         @Inject(DependencyInjectionEnum.ACCOUNT_REPOSITORY) private readonly accountRepository: AccountRepositoryInterface
-    ) {}
+    ) { }
+
     async reset(): Promise<void> {
-        try {
-            await this.accountRepository.resetTable();
-        } catch (error) {
-            console.error('Error resetting account table:', error);
-            throw new Error('Failed to reset account table');
-        }
+        await this.accountRepository.resetTable();
     }
 
     async findAccountById(id: string): Promise<Account | null> {
-        try {
-            return await this.accountRepository.findById(id);
-        } catch (error) {
-            console.error('Error finding account by ID:', error);
-            throw new Error('Failed to find account');
-        }
+        return await this.accountRepository.findById(id);
     }
     async createAccount(account: AccountModel): Promise<Account> {
         return await this.accountRepository.save(account);
     }
 
     async deposit(account: Account, amount: number): Promise<Account> {
-
         account.balance += amount;
+        account.updatedAt = new Date();
 
         return await this.accountRepository.save(account);
     }
@@ -50,15 +41,10 @@ export class AccountService implements AccountServiceInterface {
     }
 
     async getBalance(accountId: string): Promise<number | null> {
-        try {
-            const account = await this.findAccountById(accountId);
-            if (!account) {
-                return null;
-            }
-            return account.balance;
-        } catch (error) {
-            console.error('Error fetching account balance:', error);
-            throw new Error('Failed to fetch account balance');
+        const account = await this.findAccountById(accountId);
+        if (!account) {
+            return null;
         }
+        return account.balance;
     }
 }

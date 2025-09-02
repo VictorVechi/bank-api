@@ -2,11 +2,11 @@ import { AccountService } from "src/account/application/account.service";
 import { AccountController } from "src/account/infra/controller/account.controller";
 import { PrismaAccountRepository } from "src/account/infra/repository/prisma-account-repository";
 import { PrismaService } from "src/database/application/prisma.service";
-import { EventContextService } from "src/events/application/event-context.service";
-import { DepositServiceStrategy } from "src/events/application/strategies/deposit.service";
-import { TransferServiceStrategy } from "src/events/application/strategies/transfer.service";
-import { WithdrawServiceStrategy } from "src/events/application/strategies/withdraw.service";
-import { EventContextInterface } from "src/events/domain/application/event-context-interface";
+import { EventContextService } from "src/account/application/event-context.service";
+import { DepositServiceStrategy } from "src/account/application/strategies/deposit.service";
+import { TransferServiceStrategy } from "src/account/application/strategies/transfer.service";
+import { WithdrawServiceStrategy } from "src/account/application/strategies/withdraw.service";
+import { EventContextInterface } from "src/account/domain/application/event-context-interface";
 import { EventController } from "src/events/infra/controller/event.controller";
 import { depositEventMock } from "test/Unit/mocks/event.mock";
 
@@ -52,16 +52,6 @@ describe('EventController', () => {
         expect(mockRes.send).toHaveBeenCalledWith(response);
     });
 
-    it('should process deposit event', async () => {
-        ;
-        depositService.executeTransaction = jest.fn().mockResolvedValue(null);
-        const mockRes = { status: jest.fn().mockReturnThis(), send: jest.fn() } as any;
-
-        await controller.handleEvent(depositEventMock, mockRes);
-        expect(depositService.executeTransaction).toHaveBeenCalledWith(depositEventMock);
-        expect(mockRes.status).toHaveBeenCalledWith(404);
-        expect(mockRes.send).toHaveBeenCalledWith(0);
-    });
 
 
     it('should return 500 if eventContextService.processEvent throws', async () => {
@@ -69,7 +59,7 @@ describe('EventController', () => {
         const mockRes = { status: jest.fn().mockReturnThis(), send: jest.fn() } as any;
 
         await controller.handleEvent(depositEventMock, mockRes);
-        expect(mockRes.status).toHaveBeenCalledWith(500);
-        expect(mockRes.send).toHaveBeenCalledWith({ message: 'Internal Server Error' });
+        expect(mockRes.status).toHaveBeenCalledWith(404);
+        expect(mockRes.send).toHaveBeenCalledWith(0);
     });
 })

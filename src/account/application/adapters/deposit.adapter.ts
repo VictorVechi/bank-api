@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Account } from "@prisma/client";
-import { DepositAdapterInterface } from "src/events/domain/application/adapters/deposit-adapter.interface";
-import { DepositResponseDto } from "src/events/domain/dto/deposit-response.dto";
+import { DepositAdapterInterface } from "src/account/domain/application/adapters/deposit-adapter.interface";
+import { DepositResponseDto } from "src/account/domain/dto/deposit-response.dto";
 @Injectable()
 export class DepositAdapter implements DepositAdapterInterface {
 

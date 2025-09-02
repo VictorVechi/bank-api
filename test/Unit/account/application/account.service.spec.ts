@@ -1,10 +1,10 @@
 import { Decimal } from '@prisma/client/runtime/library';
 import { AccountService } from 'src/account/application/account.service';
-import { AccountRepository } from 'src/account/domain/repository/account-repository.interface';
+import { AccountRepositoryInterface } from 'src/account/domain/repository/account-repository.interface';
 
 describe('AccountService', () => {
     let service: AccountService;
-    let repository: jest.Mocked<AccountRepository>;
+    let repository: jest.Mocked<AccountRepositoryInterface>;
     jest.spyOn(console, 'error').mockImplementation(() => {});
 
     beforeEach(() => {
@@ -37,54 +37,6 @@ describe('AccountService', () => {
     it('should capture an exception when finding account by ID', async () => {
         repository.findById.mockRejectedValue(new Error('Error'));
         await expect(service.findAccountById('id')).rejects.toThrow('Failed to find account');
-    });
-
-    it('should save an account', async () => {
-        repository.save.mockResolvedValue({
-            id: 'id',
-            balance: new Decimal(100),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        });
-
-        await expect(service.saveAccount({ id: 'id', balance: 100 })).resolves.toEqual({
-            id: 'id',
-            balance: new Decimal(100),
-            createdAt: expect.any(Date),
-            updatedAt: expect.any(Date),
-        });
-    });
-
-    it('should capture an exception when saving an account', async () => {
-        repository.save.mockRejectedValue(new Error('Error'));
-        await expect(service.saveAccount({ id: 'id', balance: 100 })).rejects.toThrow('Failed to save account');
-    });
-
-    it('should save an account', async () => {
-        repository.saveAll.mockResolvedValue(
-            [
-                {
-                    id: 'id',
-                    balance: new Decimal(100),
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                }
-            ]
-        );
-
-        await expect(service.saveAccounts([{ id: 'id', balance: 100 }])).resolves.toEqual([
-            {
-                id: 'id',
-                balance: new Decimal(100),
-                createdAt: expect.any(Date),
-                updatedAt: expect.any(Date),
-            }
-        ]);
-    });
-
-    it('should capture an exception when saving an account', async () => {
-        repository.saveAll.mockRejectedValue(new Error('Error'));
-        await expect(service.saveAccounts([{ id: 'id', balance: 100 }])).rejects.toThrow('Failed to save accounts');
     });
 
     it('should return balance as number', async () => {

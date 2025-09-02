@@ -1,6 +1,6 @@
 import { Account } from "@prisma/client";
-import { WithdrawAdapterInterface } from "src/events/domain/application/adapters/withdraw-adapter.interface";
-import { WithdrawResponseDto } from "src/events/domain/dto/withdraw-response.dto";
+import { WithdrawAdapterInterface } from "src/account/domain/application/adapters/withdraw-adapter.interface";
+import { WithdrawResponseDto } from "src/account/domain/dto/withdraw-response.dto";
 
 
 
