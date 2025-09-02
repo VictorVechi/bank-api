@@ -13,19 +13,16 @@ import type { TransferAdapterInterface } from "src/account/domain/application/ad
 @Injectable()
 export class TransferServiceStrategy implements TransferStrategyInterface {
     constructor(
-            @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface,
-            @Inject(DependencyInjectionEnum.TRANSFER_ADAPTER) private readonly transferAdapter: TransferAdapterInterface
-        ) {}
+        @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface,
+        @Inject(DependencyInjectionEnum.TRANSFER_ADAPTER) private readonly transferAdapter: TransferAdapterInterface
+    ) { }
     async executeTransaction(event: EventDto): Promise<TransferResponseDto> {
 
         const transferData = this.validateEvent(event);
 
-        let originAccount = await this.validateOrigin(transferData.origin);
-        let destinationAccount = await this.getDestination(transferData.destination);
+        let originAccount = await this.transferFrom(transferData);
+        let destinationAccount = await this.transferTo(transferData);
 
-        originAccount = await this.accountService.withdraw(originAccount, transferData.amount);
-        destinationAccount = await this.accountService.deposit(destinationAccount, transferData.amount);
-        
         return this.transferAdapter.adapt(originAccount, destinationAccount);
 
     }
@@ -42,25 +39,29 @@ export class TransferServiceStrategy implements TransferStrategyInterface {
         };
     }
 
-    private async validateOrigin(id: string): Promise<Account> {
-        const account = await this.accountService.findAccountById(id);
+    private async transferFrom(transferData: TransferDto): Promise<Account> {
+        let account = await this.accountService.findAccountById(transferData.origin);
         if (!account) {
             throw new Error("Origin account not found");
         }
+
+        account = await this.accountService.withdraw(account, transferData.amount);
+
         return account;
     }
 
-    private async getDestination(id: string): Promise<Account> {
-        let account = await this.accountService.findAccountById(id);
+    private async transferTo(transferData: TransferDto): Promise<Account> {
+        let account = await this.accountService.findAccountById(transferData.destination);
         if (!account) {
             const newAccount: AccountModel = {
-                id: id,
+                id: transferData.destination,
                 balance: 0,
             };
 
-            return await this.accountService.createAccount(newAccount);
+            account = await this.accountService.createAccount(newAccount);
         }
 
+        account = await this.accountService.deposit(account, transferData.amount);
         return account;
     }
 }
