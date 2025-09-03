@@ -5,17 +5,17 @@ import { DependencyInjectionEnum } from "src/dependencyInjection/dependency-inje
 import { DepositResponseDto } from "src/account/domain/dto/deposit-response.dto";
 import { EventDto } from "src/account/domain/dto/event.dto";
 import type { DepositAdapterInterface } from "src/account/domain/application/adapters/deposit-adapter.interface";
-import { DepositStrategyInterface } from "src/account/domain/application/strategies/deposit-strategy.interface";
+import { DepositUseCaseInterface } from "src/account/domain/application/use-cases/deposit-use-case.interface";
 
 
 @Injectable()
-export class DepositServiceStrategy implements DepositStrategyInterface {
+export class DepositUseCase implements DepositUseCaseInterface {
     constructor(
         @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface,
         @Inject(DependencyInjectionEnum.DEPOSIT_ADAPTER) private readonly depositAdapter: DepositAdapterInterface
     ) {}
 
-    async executeTransaction(event: EventDto): Promise<DepositResponseDto> {
+    async execute(event: EventDto): Promise<DepositResponseDto> {
 
         const depositData = this.validateEvent(event);
 

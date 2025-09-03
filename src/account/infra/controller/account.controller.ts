@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Query, Res } from '@nestjs/common';
 import type { Response } from 'express';
 import type { AccountServiceInterface } from 'src/account/domain/application/account-service.interface';
-import type { EventContextInterface } from 'src/account/domain/application/event-context-interface';
+import type { EventContextInterface } from 'src/account/domain/application/event-manager.interface';
 import { EventDto } from 'src/account/domain/dto/event.dto';
 import { DependencyInjectionEnum } from 'src/dependencyInjection/dependency-injection.enum';
 

@@ -2,7 +2,7 @@ import { Decimal } from "@prisma/client/runtime/library"
 import { AccountService } from "src/account/application/account.service"
 import { PrismaAccountRepository } from "src/account/infra/repository/prisma-account-repository"
 import { PrismaService } from "src/database/application/prisma.service"
-import { WithdrawServiceStrategy } from "src/account/application/strategies/withdraw.service"
+import { WithdrawServiceStrategy } from "src/account/application/use-cases/withdraw.use-case"
 import { invalidWithdrawEventMock, withdrawEventMock } from "test/Unit/mocks/event.mock"
 
 

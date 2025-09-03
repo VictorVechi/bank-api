@@ -2,7 +2,7 @@ import { Decimal } from "@prisma/client/runtime/library"
 import { AccountService } from "src/account/application/account.service"
 import { PrismaAccountRepository } from "src/account/infra/repository/prisma-account-repository"
 import { PrismaService } from "src/database/application/prisma.service"
-import { DepositServiceStrategy } from "src/account/application/strategies/deposit.service"
+import { DepositServiceStrategy } from "src/account/application/use-cases/deposit.use-case"
 import { depositEventMock, invalidDepositEventMock } from "test/Unit/mocks/event.mock"
 
 

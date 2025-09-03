@@ -4,17 +4,17 @@ import { AccountModel } from "src/account/domain/entity/account.entity";
 import { DependencyInjectionEnum } from "src/dependencyInjection/dependency-injection.enum";
 import { EventDto } from "src/account/domain/dto/event.dto";
 import { WithdrawResponseDto } from "src/account/domain/dto/withdraw-response.dto";
-import { WithdrawStrategyInterface } from "src/account/domain/application/strategies/withdraw-strategy.interface";
 import type { WithdrawAdapterInterface } from "src/account/domain/application/adapters/withdraw-adapter.interface";
+import { WithdrawUseCaseInterface } from "src/account/domain/application/use-cases/withdraw-use-case.interface";
 
 
 @Injectable()
-export class WithdrawServiceStrategy implements WithdrawStrategyInterface {
+export class WithdrawUseCase implements WithdrawUseCaseInterface {
     constructor(
             @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface,
             @Inject(DependencyInjectionEnum.WITHDRAW_ADAPTER) private readonly withdrawAdapter: WithdrawAdapterInterface
         ) {}
-    async executeTransaction(event: EventDto): Promise<WithdrawResponseDto> {
+    async execute(event: EventDto): Promise<WithdrawResponseDto> {
         const withdrawData = this.validateEvent(event);
 
         let account = await this.accountService.findAccountById(withdrawData.id);

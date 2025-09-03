@@ -6,17 +6,17 @@ import { DependencyInjectionEnum } from "src/dependencyInjection/dependency-inje
 import { EventDto } from "src/account/domain/dto/event.dto";
 import { TransferResponseDto } from "src/account/domain/dto/transfer-response.dto";
 import { TransferDto } from "src/account/domain/dto/transfer.dto";
-import { TransferStrategyInterface } from "src/account/domain/application/strategies/transfer-strategy.interface";
 import type { TransferAdapterInterface } from "src/account/domain/application/adapters/transfer-adapter.interface";
+import { TransferUseCaseInterface } from "src/account/domain/application/use-cases/transfer-use-case.interface";
 
 
 @Injectable()
-export class TransferServiceStrategy implements TransferStrategyInterface {
+export class TransferUseCase implements TransferUseCaseInterface {
     constructor(
         @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface,
         @Inject(DependencyInjectionEnum.TRANSFER_ADAPTER) private readonly transferAdapter: TransferAdapterInterface
     ) { }
-    async executeTransaction(event: EventDto): Promise<TransferResponseDto> {
+    async execute(event: EventDto): Promise<TransferResponseDto> {
 
         const transferData = this.validateEvent(event);
 

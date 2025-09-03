@@ -1,20 +1,25 @@
 
 
 export enum DependencyInjectionEnum {
+    EVENT_MANAGER = 'EventManagerInterface',
+
+    // Services
     ACCOUNT_SERVICE = 'AccountServiceInterface',
-    EVENT_CONTEXT = 'EventContextInterface',
-    ACCOUNT_REPOSITORY = 'AccountRepositoryInterface',
-    PRISMA_SERVICE = 'PrismaServiceInterface',
 
-    EVENT_CONTROLLER = 'EventControllerInterface',
-
-    // Strategies
-    DEPOSIT_STRATEGY = 'DepositStrategyInterface',
-    WITHDRAW_STRATEGY = 'WithdrawStrategyInterface',
-    TRANSFER_STRATEGY = 'TransferStrategyInterface',
+    // Use Cases
+    DEPOSIT_CASE = 'DepositUseCaseInterface',
+    WITHDRAW_CASE = 'WithdrawUseCaseInterface',
+    TRANSFER_CASE = 'TransferUseCaseInterface',
 
     // Adapters
     DEPOSIT_ADAPTER = 'DepositAdapterInterface',
     WITHDRAW_ADAPTER = 'WithdrawAdapterInterface',
     TRANSFER_ADAPTER = 'TransferAdapterInterface',
+
+
+    // Repositories
+    ACCOUNT_REPOSITORY = 'AccountRepositoryInterface',
+    
+    // Database
+    PRISMA_SERVICE = 'PrismaService',
 }

@@ -2,11 +2,11 @@ import { AccountService } from "src/account/application/account.service";
 import { AccountController } from "src/account/infra/controller/account.controller";
 import { PrismaAccountRepository } from "src/account/infra/repository/prisma-account-repository";
 import { PrismaService } from "src/database/application/prisma.service";
-import { EventContextService } from "src/account/application/event-context.service";
-import { DepositServiceStrategy } from "src/account/application/strategies/deposit.service";
-import { TransferServiceStrategy } from "src/account/application/strategies/transfer.service";
-import { WithdrawServiceStrategy } from "src/account/application/strategies/withdraw.service";
-import { EventContextInterface } from "src/account/domain/application/event-context-interface";
+import { EventContextService } from "src/account/application/event-manager";
+import { DepositServiceStrategy } from "src/account/application/use-cases/deposit.use-case";
+import { TransferServiceStrategy } from "src/account/application/use-cases/transfer.use-case";
+import { WithdrawServiceStrategy } from "src/account/application/use-cases/withdraw.use-case";
+import { EventContextInterface } from "src/account/domain/application/event-manager.interface";
 import { EventController } from "src/events/infra/controller/event.controller";
 import { depositEventMock } from "test/Unit/mocks/event.mock";
 

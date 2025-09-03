@@ -6,20 +6,13 @@ import type { AccountRepositoryInterface } from '../domain/repository/account-re
 import { AccountModel } from '../domain/entity/account.entity';
 
 @Injectable()
-export class AccountService implements AccountServiceInterface {
+export class AccountBalanceService implements AccountServiceInterface {
     constructor(
         @Inject(DependencyInjectionEnum.ACCOUNT_REPOSITORY) private readonly accountRepository: AccountRepositoryInterface
     ) { }
 
     async reset(): Promise<void> {
         await this.accountRepository.resetTable();
-    }
-
-    async findAccountById(id: string): Promise<Account | null> {
-        return await this.accountRepository.findById(id);
-    }
-    async createAccount(account: AccountModel): Promise<Account> {
-        return await this.accountRepository.save(account);
     }
 
     async deposit(account: Account, amount: number): Promise<Account> {
@@ -41,7 +34,7 @@ export class AccountService implements AccountServiceInterface {
     }
 
     async getBalance(accountId: string): Promise<number | null> {
-        const account = await this.findAccountById(accountId);
+        const account = await this.accountRepository.findById(accountId);
         if (!account) {
             return null;
         }
