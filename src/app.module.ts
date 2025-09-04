@@ -11,6 +11,9 @@ import { EventManager } from './account/application/event-manager';
 import { DepositUseCase } from './account/application/use-cases/deposit.use-case';
 import { WithdrawUseCase } from './account/application/use-cases/withdraw.use-case';
 import { TransferUseCase } from './account/application/use-cases/transfer.use-case';
+import { DepositValidator } from './account/application/validator/deposit.validator';
+import { WithdrawValidator } from './account/application/validator/withdraw.validator';
+import { TransferValidator } from './account/application/validator/transfer.validator';
 
 @Module({
     imports: [],
@@ -57,6 +60,18 @@ import { TransferUseCase } from './account/application/use-cases/transfer.use-ca
         {
             provide: DependencyInjectionEnum.TRANSFER_ADAPTER,
             useClass: TransferAdapter
+        },
+        {
+            provide: DependencyInjectionEnum.DEPOSIT_VALIDATOR,
+            useClass: DepositValidator
+        },
+        {
+            provide: DependencyInjectionEnum.WITHDRAW_VALIDATOR,
+            useClass: WithdrawValidator
+        },
+        {
+            provide: DependencyInjectionEnum.TRANSFER_VALIDATOR,
+            useClass: TransferValidator
         }
     ],
 })

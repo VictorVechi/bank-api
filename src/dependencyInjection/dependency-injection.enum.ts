@@ -16,6 +16,11 @@ export enum DependencyInjectionEnum {
     WITHDRAW_ADAPTER = 'WithdrawAdapterInterface',
     TRANSFER_ADAPTER = 'TransferAdapterInterface',
 
+    // Validators
+    DEPOSIT_VALIDATOR = 'DepositValidatorInterface',
+    WITHDRAW_VALIDATOR = 'WithdrawValidatorInterface',
+    TRANSFER_VALIDATOR = 'TransferValidatorInterface',
+
 
     // Repositories
     ACCOUNT_REPOSITORY = 'AccountRepositoryInterface',

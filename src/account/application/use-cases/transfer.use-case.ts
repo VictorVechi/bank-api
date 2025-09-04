@@ -1,12 +1,13 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Account } from "@prisma/client";
 import type { AccountServiceInterface } from "src/account/domain/application/account-service.interface";
+import type { TransferAdapterInterface } from "src/account/domain/application/adapters/transfer-adapter.interface";
+import type { TransferValidatorInterface } from "src/account/domain/application/validator/transfer-validator.interface";
+import type { AccountRepositoryInterface } from "src/account/domain/repository/account-repository.interface";
 import { AccountModel } from "src/account/domain/entity/account.entity";
 import { DependencyInjectionEnum } from "src/dependencyInjection/dependency-injection.enum";
 import { EventDto } from "src/account/domain/dto/event.dto";
 import { TransferResponseDto } from "src/account/domain/dto/transfer-response.dto";
-import { TransferDto } from "src/account/domain/dto/transfer.dto";
-import type { TransferAdapterInterface } from "src/account/domain/application/adapters/transfer-adapter.interface";
 import { TransferUseCaseInterface } from "src/account/domain/application/use-cases/transfer-use-case.interface";
 
 
@@ -14,54 +15,41 @@ import { TransferUseCaseInterface } from "src/account/domain/application/use-cas
 export class TransferUseCase implements TransferUseCaseInterface {
     constructor(
         @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface,
-        @Inject(DependencyInjectionEnum.TRANSFER_ADAPTER) private readonly transferAdapter: TransferAdapterInterface
+        @Inject(DependencyInjectionEnum.TRANSFER_ADAPTER) private readonly transferAdapter: TransferAdapterInterface,
+        @Inject(DependencyInjectionEnum.ACCOUNT_REPOSITORY) private readonly accountRepository: AccountRepositoryInterface,
+        @Inject(DependencyInjectionEnum.TRANSFER_VALIDATOR) private readonly transferValidator: TransferValidatorInterface
     ) { }
     async execute(event: EventDto): Promise<TransferResponseDto> {
+        this.transferValidator.execute(event);
 
-        const transferData = this.validateEvent(event);
+        const originAccount = await this.transferFrom(event);
+        const destinationAccount = await this.transferTo(event); 
 
-        let originAccount = await this.transferFrom(transferData);
-        let destinationAccount = await this.transferTo(transferData);
+        await this.accountRepository.save(originAccount);
+        await this.accountRepository.save(destinationAccount);
 
         return this.transferAdapter.adapt(originAccount, destinationAccount);
-
     }
 
-    private validateEvent(event: EventDto): TransferDto {
-        if (!event.origin || !event.destination || event.amount <= 0) {
-            throw new Error("Invalid transfer event data");
-        }
-
-        return {
-            origin: event.origin,
-            destination: event.destination,
-            amount: event.amount,
-        };
-    }
-
-    private async transferFrom(transferData: TransferDto): Promise<Account> {
-        let account = await this.accountService.findAccountById(transferData.origin);
-        if (!account) {
+    private async transferFrom(transferData: EventDto): Promise<Account> {
+        let originAccount = await this.accountRepository.findById(transferData.origin!);
+        if (!originAccount) {
             throw new Error("Origin account not found");
         }
-
-        account = await this.accountService.withdraw(account, transferData.amount);
-
-        return account;
+        
+        return this.accountService.withdraw(originAccount, transferData.amount);
     }
 
-    private async transferTo(transferData: TransferDto): Promise<Account> {
-        let account = await this.accountService.findAccountById(transferData.destination);
-        if (!account) {
+    private async transferTo(transferData: EventDto): Promise<Account> {
+        let destinationAccount = await this.accountRepository.findById(transferData.destination!);
+
+        if (!destinationAccount) {
             const newAccount: AccountModel = {
-                id: transferData.destination,
+                id: transferData.destination!,
                 balance: 0,
             };
-
-            account = await this.accountService.createAccount(newAccount);
+            destinationAccount = await this.accountRepository.save(newAccount);
         }
-
-        account = await this.accountService.deposit(account, transferData.amount);
-        return account;
+        return this.accountService.deposit(destinationAccount, transferData.amount);
     }
 }

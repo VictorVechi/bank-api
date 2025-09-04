@@ -6,38 +6,19 @@ import type { AccountRepositoryInterface } from '../domain/repository/account-re
 import { AccountModel } from '../domain/entity/account.entity';
 
 @Injectable()
-export class AccountBalanceService implements AccountServiceInterface {
-    constructor(
-        @Inject(DependencyInjectionEnum.ACCOUNT_REPOSITORY) private readonly accountRepository: AccountRepositoryInterface
-    ) { }
+export class AccountService implements AccountServiceInterface {
 
-    async reset(): Promise<void> {
-        await this.accountRepository.resetTable();
-    }
-
-    async deposit(account: Account, amount: number): Promise<Account> {
+    deposit(account: Account, amount: number): Account {
         account.balance += amount;
         account.updatedAt = new Date();
 
-        return await this.accountRepository.save(account);
+        return account;
     }
 
-    async withdraw(account: Account, amount: number): Promise<Account> {
-        if (account.balance < amount) {
-            throw new Error('Insufficient funds');
-        }
-
+    withdraw(account: Account, amount: number): Account {
         account.balance -= amount;
         account.updatedAt = new Date();
 
-        return await this.accountRepository.save(account);
-    }
-
-    async getBalance(accountId: string): Promise<number | null> {
-        const account = await this.accountRepository.findById(accountId);
-        if (!account) {
-            return null;
-        }
-        return account.balance;
+        return account;
     }
 }
