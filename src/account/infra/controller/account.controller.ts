@@ -27,14 +27,10 @@ export class AccountController {
     async getBalance(@Res() res: Response, @Query('account_id') accountId: string): Promise<void> {
         try {
             const balance = await this.accountBalance.getBalance(accountId);
-            if (!balance) {
-                res.status(HttpStatus.NOT_FOUND).send(0);
-                return;
-            }
             res.status(HttpStatus.OK).send(balance);
         } catch (error) {
             console.error('Error fetching account balance:', error);
-            res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            res.status(HttpStatus.NOT_FOUND).send(0);
         }
     }
 
