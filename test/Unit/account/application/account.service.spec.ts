@@ -1,5 +1,5 @@
 import { Decimal } from '@prisma/client/runtime/library';
-import { AccountService } from 'src/account/application/account.service';
+import { AccountService } from 'src/account/application/services/account-transaction.service';
 import { AccountRepositoryInterface } from 'src/account/domain/repository/account-repository.interface';
 
 describe('AccountService', () => {

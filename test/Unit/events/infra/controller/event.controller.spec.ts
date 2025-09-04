@@ -1,4 +1,4 @@
-import { AccountService } from "src/account/application/account.service";
+import { AccountService } from "src/account/application/services/account-transaction.service";
 import { AccountController } from "src/account/infra/controller/account.controller";
 import { PrismaAccountRepository } from "src/account/infra/repository/prisma-account-repository";
 import { PrismaService } from "src/database/application/prisma.service";

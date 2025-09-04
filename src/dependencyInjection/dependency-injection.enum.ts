@@ -4,7 +4,8 @@ export enum DependencyInjectionEnum {
     EVENT_MANAGER = 'EventManagerInterface',
 
     // Services
-    ACCOUNT_SERVICE = 'AccountServiceInterface',
+    ACCOUNT_TRANSACTION_SERVICE = 'AccountTransactionInterface',
+    ACCOUNT_BALANCE_SERVICE = 'AccountBalanceInterface',
 
     // Use Cases
     DEPOSIT_CASE = 'DepositUseCaseInterface',

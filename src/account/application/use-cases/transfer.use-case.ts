@@ -1,9 +1,9 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Account } from "@prisma/client";
-import type { AccountServiceInterface } from "src/account/domain/application/account-service.interface";
 import type { TransferAdapterInterface } from "src/account/domain/application/adapters/transfer-adapter.interface";
 import type { TransferValidatorInterface } from "src/account/domain/application/validator/transfer-validator.interface";
 import type { AccountRepositoryInterface } from "src/account/domain/repository/account-repository.interface";
+import type { AccountTransactionInterface } from "src/account/domain/application/services/account-service.interface";
 import { AccountModel } from "src/account/domain/entity/account.entity";
 import { DependencyInjectionEnum } from "src/dependencyInjection/dependency-injection.enum";
 import { EventDto } from "src/account/domain/dto/event.dto";
@@ -14,7 +14,7 @@ import { TransferUseCaseInterface } from "src/account/domain/application/use-cas
 @Injectable()
 export class TransferUseCase implements TransferUseCaseInterface {
     constructor(
-        @Inject(DependencyInjectionEnum.ACCOUNT_SERVICE) private readonly accountService: AccountServiceInterface,
+        @Inject(DependencyInjectionEnum.ACCOUNT_TRANSACTION_SERVICE) private readonly accountTransaction: AccountTransactionInterface,
         @Inject(DependencyInjectionEnum.TRANSFER_ADAPTER) private readonly transferAdapter: TransferAdapterInterface,
         @Inject(DependencyInjectionEnum.ACCOUNT_REPOSITORY) private readonly accountRepository: AccountRepositoryInterface,
         @Inject(DependencyInjectionEnum.TRANSFER_VALIDATOR) private readonly transferValidator: TransferValidatorInterface
@@ -36,8 +36,12 @@ export class TransferUseCase implements TransferUseCaseInterface {
         if (!originAccount) {
             throw new Error("Origin account not found");
         }
+
+        if (originAccount.balance < transferData.amount) {
+            throw new Error("Insufficient funds");
+        }
         
-        return this.accountService.withdraw(originAccount, transferData.amount);
+        return this.accountTransaction.withdraw(originAccount, transferData.amount);
     }
 
     private async transferTo(transferData: EventDto): Promise<Account> {
@@ -50,6 +54,6 @@ export class TransferUseCase implements TransferUseCaseInterface {
             };
             destinationAccount = await this.accountRepository.save(newAccount);
         }
-        return this.accountService.deposit(destinationAccount, transferData.amount);
+        return this.accountTransaction.deposit(destinationAccount, transferData.amount);
     }
 }

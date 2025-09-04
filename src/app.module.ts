@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from './database/application/prisma.service';
 import { PrismaAccountRepository } from './account/infra/repository/prisma-account-repository';
-import { AccountService } from './account/application/account.service';
 import { AccountController } from './account/infra/controller/account.controller';
 import { DependencyInjectionEnum } from './dependencyInjection/dependency-injection.enum';
 import { DepositAdapter } from './account/application/adapters/deposit.adapter';
@@ -14,6 +13,8 @@ import { TransferUseCase } from './account/application/use-cases/transfer.use-ca
 import { DepositValidator } from './account/application/validator/deposit.validator';
 import { WithdrawValidator } from './account/application/validator/withdraw.validator';
 import { TransferValidator } from './account/application/validator/transfer.validator';
+import { AccountTransactionService } from './account/application/services/account-transaction.service';
+import { AccountBalanceService } from './account/application/services/account-balance.service';
 
 @Module({
     imports: [],
@@ -26,8 +27,8 @@ import { TransferValidator } from './account/application/validator/transfer.vali
             useClass: PrismaService
         },
         {
-            provide: DependencyInjectionEnum.ACCOUNT_SERVICE,
-            useClass: AccountService
+            provide: DependencyInjectionEnum.ACCOUNT_TRANSACTION_SERVICE,
+            useClass: AccountTransactionService
         },
         {
             provide: DependencyInjectionEnum.EVENT_MANAGER,
@@ -72,6 +73,10 @@ import { TransferValidator } from './account/application/validator/transfer.vali
         {
             provide: DependencyInjectionEnum.TRANSFER_VALIDATOR,
             useClass: TransferValidator
+        },
+        {
+            provide: DependencyInjectionEnum.ACCOUNT_BALANCE_SERVICE,
+            useClass: AccountBalanceService
         }
     ],
 })
