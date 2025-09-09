@@ -1,6 +1,4 @@
-# Desafio Ebanx
-
-Esse projeto foi desenvolvido para solucionar o desafio proposto pela empresa Ebanx.
+# Bank API
 
 ## Stacks
 - NestJs [https://docs.nestjs.com/]
